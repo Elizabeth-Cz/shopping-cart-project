@@ -1,60 +1,124 @@
-/* Create an array named products which you will use to add all of your product object literals that you create in the next step. */
+const products = [
+  {
+    name: "cherry",
+    price: 4,
+    quantity: 0,
+    productId: 101,
+    image: "images/cherry.jpg",
+  },
+  {
+    name: "orange",
+    price: 3,
+    quantity: 0,
+    productId: 102,
+    image: "images/orange.jpg",
+  },
+  {
+    name: "strawberry",
+    price: 10,
+    quantity: 0,
+    productId: 103,
+    image: `images/strawberry.jpg`,
+  },
+];
 
-/* Create 3 or more product objects using object literal notation 
-   Each product should include five properties
-   - name: name of product (string)
-   - price: price of product (number)
-   - quantity: quantity in cart should start at zero (number)
-   - productId: unique id for the product (number)
-   - image: picture of product (url string)
-*/
+let cart = [];
 
-/* Images provided in /images folder. All images from Unsplash.com
-   - cherry.jpg by Mae Mu
-   - orange.jpg by Mae Mu
-   - strawberry.jpg by Allec Gomes
-*/
+function addProductToCart(productId) {
+  // go over objects on products array
+  for (const product of products) {
+    // find correct product from array
+    if (product.productId === productId) {
+      // add to product quantity
+      increaseQuantity(product.productId);
+      // check if product is in the cart array
+      if (!cart.includes(product)) {
+        // if not, add product to cart array
+        cart.push(product);
+      }
+    }
+  }
+}
 
-/* Declare an empty array named cart to hold the items in the cart */
+function increaseQuantity(productId) {
+  // find product value(product object) with helper function
+  let product = findProduct(productId, products);
+  // increment quantity by 1 each time the function is called
+  product.quantity++;
+}
 
-/* Create a function named addProductToCart that takes in the product productId as an argument
-  - addProductToCart should get the correct product based on the productId
-  - addProductToCart should then increase the product's quantity
-  - if the product is not already in the cart, add it to the cart
-*/
+function decreaseQuantity(productId) {
+  // find product value(product object) with helper function
+  let product = findProduct(productId, products);
+  // decrement quantity by 1 each time the function is called
+  product.quantity--;
+  // check if product quantity is false(value of 0 or less)
+  if (!product.quantity) {
+    // if product.quantity is false, call removeFromCart() function
+    removeProductFromCart(productId);
+  }
+}
 
-/* Create a function named increaseQuantity that takes in the productId as an argument
-  - increaseQuantity should get the correct product based on the productId
-  - increaseQuantity should then increase the product's quantity
-*/
+function removeProductFromCart(productId) {
+  // find  product index with helper function for splice method
+  let productIndex = findIndex(productId, cart);
+  // find product value(product object) with helper function
+  let product = findProduct(productId, products);
+  // reduce quantity of product to 0
+  product.quantity = 0;
+  // remove 1 item from cart array at the product index
+  cart.splice(productIndex, 1);
+}
 
-/* Create a function named decreaseQuantity that takes in the productId as an argument
-  - decreaseQuantity should get the correct product based on the productId
-  - decreaseQuantity should decrease the quantity of the product
-  - if the function decreases the quantity to 0, the product is removed from the cart
-*/
+function cartTotal() {
+  // the cart total when function is called
+  let total = 0;
+  // go over cart array and multiply each item quantity with item price to get each item total
+  cart.forEach(function (item) {
+    let itemTotal = item.quantity * item.price;
+    // add each item total to cart total
+    total += itemTotal;
+  });
+  //function returns the cart total
+  return total;
+}
 
-/* Create a function named removeProductFromCart that takes in the productId as an argument
-  - removeProductFromCart should get the correct product based on the productId
-  - removeProductFromCart should update the product quantity to 0
-  - removeProductFromCart should remove the product from the cart
-*/
+// don't know how to test this function, I don't see a "empty cart" button on the front end
+function emptyCart() {
+  // go  over cart array and reduce quantity of each item to 0
+  cart.forEach((product) => {
+    removeProductFromCart(product.productId);
+  });
+}
 
-/* Create a function named cartTotal that has no parameters
-  - cartTotal should iterate through the cart to get the total of all products
-  - cartTotal should return the sum of the products in the cart
-*/
+// I tested this function and it works on the front end, but failing test script(on line 76 "pay less than the total works")
+// please elaborate on why this is failing
 
-/* Create a function called emptyCart that empties the products from the cart */
-
-/* Create a function named pay that takes in an amount as an argument
-  - pay will return a negative number if there is a remaining balance
-  - pay will return a positive number if money should be returned to customer
-*/
+let balance = 0;
+let totalAmount = 0;
+function pay(amount) {
+  totalAmount += amount;
+  balance = totalAmount - cartTotal();
+  return balance;
+}
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
+function findIndex(productId, arr) {
+  for (const index in arr) {
+    if (arr[index].productId === productId) {
+      return index;
+    }
+  }
+}
 
+function findProduct(productId, arr) {
+  for (const item of arr) {
+    if (item.productId === productId) {
+      return item;
+    }
+  }
+}
 /* The following is for running unit tests. 
    To fully complete this project, it is expected that all tests pass.
    Run the following command in terminal to run tests
@@ -62,15 +126,15 @@
 */
 
 module.exports = {
-   products,
-   cart,
-   addProductToCart,
-   increaseQuantity,
-   decreaseQuantity,
-   removeProductFromCart,
-   cartTotal,
-   pay, 
-   emptyCart,
-   /* Uncomment the following line if completing the currency converter bonus */
-   // currency
-}
+  products,
+  cart,
+  addProductToCart,
+  increaseQuantity,
+  decreaseQuantity,
+  removeProductFromCart,
+  cartTotal,
+  pay,
+  emptyCart,
+  /* Uncomment the following line if completing the currency converter bonus */
+  // currency
+};
