@@ -79,7 +79,6 @@ function cartTotal() {
     // add each item total to cart total
     total += itemTotal;
   });
-  //function returns the cart total
   return total;
 }
 
@@ -91,7 +90,7 @@ function emptyCart() {
   });
 }
 
-// I tested this function and it works on the front end, but failing test script(on line 76 "pay less than the total works")
+// I tested this function and it works on the front end, but failing =test script(on line 76 "pay less than the total works")
 // please elaborate on why this is failing
 
 let balance = 0;
