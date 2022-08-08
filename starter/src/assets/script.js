@@ -70,16 +70,13 @@ function removeProductFromCart(productId) {
   cart.splice(productIndex, 1);
 }
 
+let totalCost = 0;
 function cartTotal() {
-  // the cart total when function is called
-  let total = 0;
-  // go over cart array and multiply each item quantity with item price to get each item total
-  cart.forEach(function (item) {
-    let itemTotal = item.quantity * item.price;
-    // add each item total to cart total
-    total += itemTotal;
-  });
-  return total;
+  totalCost = cart.reduce(
+    (acc, product) => acc + product.quantity * product.price,
+    0
+  );
+  return totalCost;
 }
 
 // don't know how to test this function, I don't see a "empty cart" button on the front end
@@ -93,12 +90,10 @@ function emptyCart() {
 // I tested this function and it works on the front end, but failing =test script(on line 76 "pay less than the total works")
 // please elaborate on why this is failing
 
-let balance = 0;
 let totalAmount = 0;
 function pay(amount) {
   totalAmount += amount;
-  balance = totalAmount - cartTotal();
-  return balance;
+  return totalAmount - cartTotal();
 }
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
